@@ -9,6 +9,9 @@
           <v-card-subtitle class="deep-purple--text text--lighten-4">
             Neelansh Mathur 1911093
           </v-card-subtitle>
+          <v-card-actions>
+            <v-btn color="deep-purple lighten-4" @click="flushdb" text>Flush RedisDB</v-btn>
+          </v-card-actions>
         </v-card>
         <v-card v-if="responseTime" color="yellow darken-2" class="mt-3 mb-3">
           <v-card-title>Response Time</v-card-title>
@@ -38,12 +41,11 @@
                 contain
               />
               <v-card-title> {{ item.title }} </v-card-title>
-              <v-card-subtitle> {{ item.subtitle }} </v-card-subtitle>
+              <v-card-subtitle> <span v-for="author in item.authors" :key="author">{{author}} </span> </v-card-subtitle>
+              <v-card-text><b>Publisher:</b> {{item.publisher}}</v-card-text>
             </v-card>
           </v-col>
         </v-row>
-
-        {{ responseTime }}
       </v-container>
     </v-main>
   </v-app>
@@ -76,6 +78,12 @@ export default {
         });
       }
     },
+    flushdb(){
+      axios.get('http://localhost:8000/flushall')
+      .then((res) => {
+        console.log(res)
+      })
+    }
   },
 };
 </script>
