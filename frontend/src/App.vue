@@ -1,60 +1,81 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
     <v-main>
-      <HelloWorld/>
+      <v-container>
+        <v-card color="deep-purple darken-3" class="white--text">
+          <v-card-title>
+            Redis NoSQL Caching + Response Time Metrics
+          </v-card-title>
+          <v-card-subtitle class="deep-purple--text text--lighten-4">
+            Neelansh Mathur 1911093
+          </v-card-subtitle>
+        </v-card>
+        <v-card v-if="responseTime" color="yellow darken-2" class="mt-3 mb-3">
+          <v-card-title>Response Time</v-card-title>
+          <v-card-text>
+            <h1 class="text-h2">{{ responseTime }}</h1>
+          </v-card-text>
+        </v-card>
+        <v-form @submit.prevent="submit">
+          <v-text-field
+            class="mt-5"
+            color="purple"
+            label="Search"
+            v-model="search"
+            outlined
+          />
+        </v-form>
+
+
+        <v-row class="mt-5">
+          <v-col v-for="item in results" :key="item.thumbnail" cols="12" md="4">
+            <v-card>
+              <v-img
+                :aspect-ratio="9 / 16"
+                height="300"
+                v-if="item.thumbnail"
+                :src="item.thumbnail"
+                contain
+              />
+              <v-card-title> {{ item.title }} </v-card-title>
+              <v-card-subtitle> {{ item.subtitle }} </v-card-subtitle>
+            </v-card>
+          </v-col>
+        </v-row>
+
+        {{ responseTime }}
+      </v-container>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+import axios from "axios";
 
 export default {
-  name: 'App',
+  name: "App",
 
-  components: {
-    HelloWorld,
-  },
+  components: {},
 
   data: () => ({
-    //
+    search: "",
+    results: [],
+    responseTime: null,
   }),
+  methods: {
+    submit() {
+      if (this.search != undefined && this.search != null) {
+        axios({
+          method: "GET",
+          url: `http://localhost:8000/search?q=${this.search}`,
+        }).then((res) => {
+          this.results = res.data;
+          this.responseTime = res.headers.responsetime;
+
+          console.log(this.results);
+        });
+      }
+    },
+  },
 };
 </script>

@@ -5,12 +5,14 @@ const responseTime = require("response-time");
 const cors = require("cors");
 const PORT = 8000;
 
-app.use(cors());
 app.use(
   responseTime({
     header: "responsetime",
   })
 );
+app.use(cors({
+  exposedHeaders: 'responsetime'
+}));
 
 const redis = require("redis");
 const client = redis.createClient();
