@@ -31,7 +31,7 @@
 
 
         <v-row class="mt-5">
-          <v-col v-for="item in results" :key="item.thumbnail" cols="12" md="4">
+          <v-col v-for="item in results" :key="item.thumbnail" cols="12" md="4" transition="slide">
             <v-card>
               <v-img
                 :aspect-ratio="9 / 16"
