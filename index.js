@@ -13,7 +13,6 @@ app.use(
 );
 
 const redis = require("redis");
-const { response } = require("express");
 const client = redis.createClient();
 
 client.on("error", (error) => {
@@ -44,7 +43,7 @@ app.get("/search", (req, res) => {
       //Call Google Books API
       try {
         fetch(`https://www.googleapis.com/books/v1/volumes?q=${search}`)
-          .then((response) => response.json())
+          .then((myres) => myres.json())
           .then((json) => {
             let items = [];
             counter = 0;
