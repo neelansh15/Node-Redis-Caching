@@ -22,12 +22,14 @@ client.on("error", (error) => {
 
 app.get("/", (req, res) => {
   client.get("foo", (err, reply) => {
-    console.log("Error (if any): " + err);
     res.send(`Reply: ${reply}`);
   });
 });
 
-
+app.get("/flushall", (req, res) => {
+    client.flushall()
+    res.end("OK. Flushed all keys in all the databases")
+})
 
 app.get("/search", (req, res) => {
   let search = req.query.q;
